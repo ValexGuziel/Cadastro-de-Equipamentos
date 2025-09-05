@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Equipamentos</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+    <!-- Biblioteca QRCode.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Cadastro de Equipamentos</h1>
+
+        <form id="equipForm" enctype="multipart/form-data" method="POST" action="cadastro.php">
+            <div class="form-row">
+                <label for="nome">Nome do Equipamento:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="form-row">
+                <label for="setor">Setor:</label>
+                <input type="text" id="setor" name="setor" required>
+            </div>
+            <div class="form-row">
+                <label for="descricao">Descrição:</label>
+                <input type="text" id="descricao" name="descricao" required>
+            </div>
+            <div class="form-row form-row-photo">
+                <div>
+                    <label for="foto">Foto do Equipamento:</label>
+                    <input type="file" id="foto" name="foto" accept="image/*" required>
+                    <img id="preview" class="equip-photo" style="display:none;" alt="Pré-visualização do equipamento" />
+                </div>
+                <div id="qrCode"></div>
+            </div>
+            <div class="button-group">
+            <button type="button" id="gerarQrBtn" class="submit-btn">Gerar QR Code</button>
+            <button type="submit" class="submit-btn">Cadastrar Equipamento</button>
+            <button type="button" id="verListaBtn" class="submit-btn">Ver Lista de Equipamentos</button>
+            </div>
+
+        </form>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
