@@ -5,21 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Equipamentos</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
-
-    <!-- Biblioteca QRCode.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
     <div class="container">
-        <h1>Cadastro de Equipamentos</h1>
 
+        <nav class="main-nav">
+            <a href="index.html"><i class="fa-solid fa-plus"></i> Cadastrar Equipamento</a><a
+                href="listar_equipamentos.php"><i class="fa-solid fa-list"></i> Listar Equipamentos</a>
+
+        </nav>
+        <h1>CADASTRO DE EQUIPAMENTOS</h1>
         <form id="equipForm" enctype="multipart/form-data" method="POST" action="cadastro.php">
             <div class="form-row">
                 <label for="nome">Nome do Equipamento:</label>
                 <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="form-row">
+                <label for="tag">TAG de Identificação:</label>
+                <input type="text" id="tag" name="tag" placeholder="Ex: PAT-00123" required>
             </div>
             <div class="form-row">
                 <label for="setor">Setor:</label>
@@ -33,20 +41,54 @@
                 <div>
                     <label for="foto">Foto do Equipamento:</label>
                     <input type="file" id="foto" name="foto" accept="image/*" required>
-                    <img id="preview" class="equip-photo" style="display:none;" alt="Pré-visualização do equipamento" />
+                    <img id="preview" class="equip-photo-preview" style="display:none;" />
                 </div>
-                <div id="qrCode"></div>
             </div>
-            <div class="button-group">
-            <button type="button" id="gerarQrBtn" class="submit-btn">Gerar QR Code</button>
-            <button type="submit" class="submit-btn">Cadastrar Equipamento</button>
-            <button type="button" id="verListaBtn" class="submit-btn">Ver Lista de Equipamentos</button>
+            <div>
+                <button type="submit" class="submit-btn btn-cadastro">Cadastrar Equipamento</button>
+                <div class="info-bar" id="info-bar">Londrina, 24 de Maio de 2024, 14:30:00</div>
             </div>
-
         </form>
-
     </div>
-    <script src="script.js"></script>
+    <script>
+        // Preview da foto
+        document.getElementById('foto').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (evt) {
+                    const img = document.getElementById('preview');
+                    img.src = evt.target.result;
+                    img.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Submete o formulário via AJAX para permanecer na mesma página
+        document.getElementById('equipForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('cadastro.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json()) // Espera uma resposta JSON
+                .then(data => {
+                    alert(data.message); // Exibe a mensagem de sucesso ou erro
+                    if (data.success) {
+                        // Limpa o formulário após o sucesso
+                        document.getElementById('equipForm').reset();
+                        document.getElementById('preview').style.display = 'none';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Erro:', error);
+                    alert('Ocorreu um erro de comunicação ao tentar cadastrar o equipamento.');
+                });
+        });
+    </script>
 </body>
 
 </html>

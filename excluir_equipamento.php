@@ -1,57 +1,45 @@
 <?php
-require_once 'db_config.php'; // Usa a configuração centralizada
-
-// --- 1. Validação do ID ---
-// Verifica se o ID foi passado pela URL e se é um número inteiro.
-// Isso é uma medida de segurança crucial contra SQL Injection.
-if (!isset($_GET['id']) || !filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
-    // Se o ID for inválido, redireciona para a lista sem fazer nada.
-    header("Location: lista_equipamentos.php?status=erro_id");
-    exit();
+// Verifica se o ID foi passado na URL e se é um número válido
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die("ID do equipamento inválido ou não fornecido.");
 }
 
-$id = $_GET['id'];
+$equipamento_id = intval($_GET['id']);
 
-// --- 3. Busca o nome do arquivo da foto antes de excluir o registro ---
-// Precisamos do nome do arquivo para poder excluí-lo da pasta 'uploads'.
-$sql_select_foto = "SELECT foto FROM equipamentos WHERE id = ?";
-$stmt_select = $conn->prepare($sql_select_foto);
+// Configuração do banco de dados
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "industria";
 
-if ($stmt_select) {
-    $stmt_select->bind_param("i", $id);
-    $stmt_select->execute();
-    $result = $stmt_select->get_result();
-    
-    if ($row = $result->fetch_assoc()) {
-        $foto_path = __DIR__ . '/uploads/' . $row['foto'];
-        // Se o arquivo da foto existir, exclui-o.
-        if (!empty($row['foto']) && file_exists($foto_path)) {
-            unlink($foto_path);
-        }
+// Conexão
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verifica conexão
+if ($conn->connect_error) {
+    die("Falha na conexão: " . $conn->connect_error);
+}
+
+// Prepara o SQL para DELETE
+$sql = "DELETE FROM equipamentos WHERE id = ?";
+
+$stmt = $conn->prepare($sql);
+
+if ($stmt) {
+    $stmt->bind_param("i", $equipamento_id);
+
+    if ($stmt->execute()) {
+        // Redireciona para a lista de equipamentos com status de sucesso
+        header("Location: listar_equipamentos.php?status=deleted");
+        exit();
+    } else {
+        // Exibe erro caso a exclusão falhe
+        die("Erro ao excluir o equipamento: " . $stmt->error);
     }
-    $stmt_select->close();
-}
-
-// --- 4. Exclusão do Registro do Banco de Dados ---
-// Usamos um 'prepared statement' para excluir o equipamento com segurança.
-$sql_delete = "DELETE FROM equipamentos WHERE id = ?";
-$stmt_delete = $conn->prepare($sql_delete);
-
-if ($stmt_delete === false) {
-    die("Erro ao preparar a query de exclusão: " . $conn->error);
-}
-
-$stmt_delete->bind_param("i", $id);
-
-if ($stmt_delete->execute()) {
-    // Se a exclusão for bem-sucedida, redireciona para a lista de equipamentos.
-    header("Location: lista_equipamentos.php?status=excluido_sucesso#feedback");
+    $stmt->close();
 } else {
-    // Se houver um erro, redireciona com uma mensagem de erro.
-    header("Location: lista_equipamentos.php?status=erro#feedback");
+    die("Erro na preparação da query: " . $conn->error);
 }
 
-$stmt_delete->close();
 $conn->close();
-exit(); // Garante que o script pare aqui.
 ?>

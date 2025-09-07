@@ -1,101 +1,114 @@
 <?php
-require_once 'db_config.php'; // Usa a configuração centralizada
+// Configuração do banco de dados
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "industria";
 
-// 1. Validação do ID
-// Verifica se o ID foi passado pela URL e se é um número válido
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    header("Location: lista_equipamentos.php"); // Redireciona se o ID for inválido
-    exit();
+// Conexão
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verifica conexão
+if ($conn->connect_error) {
+    die("Falha na conexão: " . $conn->connect_error);
 }
 
-$id = $_GET['id'];
+$equipamento_id = 0;
+$equipamento = null;
 
-// 2. Busca os dados do equipamento específico
-$sql = "SELECT nome, setor, descricao, foto FROM equipamentos WHERE id = ?";
-$stmt = $conn->prepare($sql);
+// --- Processa o formulário de atualização (quando enviado via POST) ---
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Validação e recebimento dos dados
+    $equip_id_post = intval($_POST['id']);
+    $nome = $_POST['nome'];
+    $tag = $_POST['tag'];
+    $setor = $_POST['setor'];
+    $descricao = $_POST['descricao'];
 
-if ($stmt === false) {
-    die("Erro ao preparar a query: " . $conn->error);
+    // Prepara o SQL para UPDATE
+    $sql = "UPDATE equipamentos SET nome = ?, tag = ?, setor = ?, descricao = ? WHERE id = ?";
+    
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("ssssi", $nome, $tag, $setor, $descricao, $equip_id_post);
+        
+        if ($stmt->execute()) {
+            // Redireciona para a lista de equipamentos após o sucesso
+            header("Location: listar_equipamentos.php?status=updated");
+            exit();
+        } else {
+            echo "Erro ao atualizar equipamento: " . $stmt->error;
+        }
+        $stmt->close();
+    } else {
+        echo "Erro na preparação da query: " . $conn->error;
+    }
 }
 
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
-$equipamento = $result->fetch_assoc();
-
-// Se nenhum equipamento for encontrado com o ID, redireciona para a lista
-if (!$equipamento) {
-    header("Location: lista_equipamentos.php");
-    exit();
+// --- Busca os dados do equipamento para preencher o formulário (quando a página é carregada via GET) ---
+if (isset($_GET['id'])) {
+    $equipamento_id = intval($_GET['id']);
+    $sql_select = "SELECT id, nome, tag, setor, descricao FROM equipamentos WHERE id = ?";
+    $stmt_select = $conn->prepare($sql_select);
+    $stmt_select->bind_param("i", $equipamento_id);
+    $stmt_select->execute();
+    $result = $stmt_select->get_result();
+    if ($result->num_rows > 0) {
+        $equipamento = $result->fetch_assoc();
+    } else {
+        die("Equipamento não encontrado.");
+    }
+    $stmt_select->close();
+} else {
+    die("ID do equipamento não fornecido.");
 }
 
-$stmt->close();
 $conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Equipamento</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
+
 <body>
-    <div class="container">
+    <div class="container form-edicao-container">
         <h1>Editar Equipamento</h1>
-        <a href="lista_equipamentos.php" class="submit-btn" style="text-decoration: none; margin-bottom: 20px; display: inline-block;">Voltar para a Lista</a>
 
-        <!-- O formulário envia os dados para 'atualizar_equipamento.php' -->
-        <form action="atualizar_equipamento.php" method="POST" enctype="multipart/form-data">
+        <?php if ($equipamento) : ?>
+            <form action="editar_equipamento.php" method="POST">
+                <input type="hidden" name="id" value="<?php echo $equipamento['id']; ?>">
 
-            <!-- Campo oculto para enviar o ID do equipamento -->
-            <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>">
-            <!-- Campo oculto para guardar o nome da foto atual -->
-            <input type="hidden" name="foto_antiga" value="<?php echo htmlspecialchars($equipamento['foto']); ?>">
-
-            <div class="form-row">
-                <label for="nome">Nome do Equipamento:</label>
-                <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($equipamento['nome']); ?>" required>
-            </div>
-            <div class="form-row">
-                <label for="setor">Setor:</label>
-                <input type="text" id="setor" name="setor" value="<?php echo htmlspecialchars($equipamento['setor']); ?>" required>
-            </div>
-            <div class="form-row">
-                <label for="descricao">Descrição:</label>
-                <input type="text" id="descricao" name="descricao" value="<?php echo htmlspecialchars($equipamento['descricao']); ?>">
-            </div>
-            <div class="form-row form-row-photo">
-                <div>
-                    <label for="foto">Alterar Foto (opcional):</label>
-                    <input type="file" id="foto" name="foto" accept="image/*">
-                    <p style="font-size: 12px; color: #666; margin-top: 5px;">Deixe em branco para manter a imagem atual.</p>
+                <div class="form-group">
+                    <label for="nome">Nome do Equipamento:</label>
+                    <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($equipamento['nome']); ?>" required>
                 </div>
-                <div>
-                    <p>Foto Atual:</p>
-                    <img src="uploads/<?php echo htmlspecialchars($equipamento['foto']); ?>" alt="Foto atual" class="equip-photo" style="display: block;">
-                </div>
-            </div>
 
-            <button type="submit" class="submit-btn">Salvar Alterações</button>
-        </form>
+                <div class="form-group">
+                    <label for="tag">TAG de Identificação:</label>
+                    <input type="text" id="tag" name="tag" value="<?php echo htmlspecialchars($equipamento['tag']); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="setor">Setor:</label>
+                    <input type="text" id="setor" name="setor" value="<?php echo htmlspecialchars($equipamento['setor']); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao">Descrição:</label>
+                    <textarea id="descricao" name="descricao" rows="4" required><?php echo htmlspecialchars($equipamento['descricao']); ?></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn btn-edicao">Salvar Alterações</button>
+            </form>
+        <?php endif; ?>
     </div>
-
-    <script>
-        // Script simples para pré-visualização da nova imagem (opcional, mas melhora a UX)
-        document.getElementById('foto').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Encontra a imagem de pré-visualização e atualiza o 'src'
-                    const previewImg = document.querySelector('.equip-photo');
-                    previewImg.src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
 </body>
 </html>

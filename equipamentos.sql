@@ -30,9 +30,26 @@ SET time_zone = "+00:00";
 CREATE TABLE `equipamentos` (
   `id` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
+  `tag` varchar(50) DEFAULT NULL,
   `setor` varchar(100) NOT NULL,
   `descricao` text NOT NULL,
   `foto` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `manutencoes`
+--
+
+CREATE TABLE `manutencoes` (
+  `id` int(11) NOT NULL,
+  `equipamento_id` int(11) NOT NULL,
+  `data_manutencao` date NOT NULL,
+  `tipo_manutencao` varchar(50) NOT NULL COMMENT 'Ex: Preventiva, Corretiva, Preditiva',
+  `descricao` text NOT NULL,
+  `responsavel` varchar(100) NOT NULL,
+  `custo` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -43,7 +60,15 @@ CREATE TABLE `equipamentos` (
 -- Índices de tabela `equipamentos`
 --
 ALTER TABLE `equipamentos`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `tag` (`tag`);
+
+--
+-- Índices de tabela `manutencoes`
+--
+ALTER TABLE `manutencoes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `equipamento_id` (`equipamento_id`);
 
 --
 -- AUTO_INCREMENT para tabelas despejadas
@@ -54,6 +79,18 @@ ALTER TABLE `equipamentos`
 --
 ALTER TABLE `equipamentos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT de tabela `manutencoes`
+--
+ALTER TABLE `manutencoes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Restrições para tabelas despejadas
+--
+ALTER TABLE `manutencoes`
+  ADD CONSTRAINT `manutencoes_ibfk_1` FOREIGN KEY (`equipamento_id`) REFERENCES `equipamentos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
