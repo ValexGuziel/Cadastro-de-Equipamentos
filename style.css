@@ -1,42 +1,46 @@
+/* === VARIÁVEIS DE COR === */
+:root {
+  --bg-color: #eef2f5;
+  /* Cinza azulado claro */
+  --container-bg: #ffffff;
+  --primary-blue: #1976d2;
+  /* Azul técnico */
+  --dark-blue: #0d47a1;
+  --accent-orange: #f57c00;
+  /* Laranja vibrante */
+  --text-dark: #212529;
+  --text-light: #ffffff;
+  --border-color: #b0bec5;
+  --input-bg: #f8f9fa;
+}
+
 /* === ESTILOS GERAIS === */
 
 body {
   font-family: 'Roboto', Arial, sans-serif;
-  background-color: #99A0AB;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  background-color: var(--bg-color);
   margin: 0;
   padding: 20px;
 
 }
 
 .container {
-  max-width: 800px;
-  margin: 20px auto;
-  background: rgba(248, 251, 255, 0.7);
-  /* Cor de fundo com transparência */
-  backdrop-filter: blur(10px);
-  /* Efeito de desfoque */
-  -webkit-backdrop-filter: blur(10px);
-  /* Suporte para Safari */
+  max-width: 1000px;
+  margin: auto;
+  background: var(--container-bg);
   border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(44, 62, 80, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  /* Borda sutil para definir a forma */
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  border-top: 30px solid var(--dark-blue);
+  border-bottom: 2px solid var(--dark-blue);
+  border-left: 2px solid var(--dark-blue);
+  border-right: 5px solid var(--dark-blue);
   padding: 30px;
 }
 
 .container_equipamentos {
   max-width: 1200px;
   margin: 20px auto;
-  background: rgba(248, 251, 255, 0.7);
-  /* Cor de fundo com transparência */
-  backdrop-filter: blur(10px);
-  /* Efeito de desfoque */
-  -webkit-backdrop-filter: blur(10px);
-  /* Suporte para Safari */
+  background: var(--container-bg);
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
   padding: 30px;
@@ -48,7 +52,7 @@ body {
   align-items: center;
   margin-bottom: 1px;
   margin-top: 1px;
-  color: #99A0AB;
+  color: #6c757d;
 }
 
 h1 {
@@ -56,36 +60,36 @@ h1 {
   font-weight: 500;
   margin-top: 30px;
   margin-bottom: 30px;
-  color: #2a5275;
+  color: var(--dark-blue);
   font-weight: 500;
   text-align: center;
 }
 
 /* === MENU DE NAVEGAÇÃO (header.php) === */
 .main-nav button {
-  background: linear-gradient(145deg, #4a6d9b, #3c5a80);
+  background: var(--primary-blue);
   padding: 10px 20px;
   border-radius: 10px;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
   gap: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .main-nav {
-  background: linear-gradient(145deg, #4a6d9b, #3c5a80);
+  background: var(--primary-blue);
   padding: 10px 20px;
   border-radius: 10px;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
   gap: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .main-nav a {
-  color: white;
+  color: var(--text-light);
   text-decoration: none;
   padding: 10px 15px;
   border-radius: 6px;
@@ -95,11 +99,18 @@ h1 {
 
 .main-nav a i {
   margin-right: 8px;
-  /* Adiciona um espaço entre o ícone e o texto */
+  /* Ajuste este valor para aumentar ou diminuir o espaço */
+  width: 1.2em;
+  /* Garante que os ícones ocupem um espaço consistente */
 }
 
 .main-nav a:hover {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.main-nav a.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  font-weight: 700;
 }
 
 /* === FORMULÁRIOS (index, adicionar, editar) === */
@@ -123,7 +134,7 @@ form {
 .form-group label,
 .form-row label {
   font-weight: 500;
-  color: #355c7d;
+  color: var(--dark-blue);
   font-size: 16px;
 }
 
@@ -134,11 +145,11 @@ form {
 .form-row textarea {
   flex: 1;
   padding: 10px 12px;
-  border: 1px solid #b3c7e6;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 16px;
-  background: #f0f6ff;
-  color: #2d3e5e;
+  background: var(--input-bg);
+  color: var(--text-dark);
   font-family: 'Roboto', sans-serif;
   transition: border 0.2s;
 }
@@ -148,14 +159,13 @@ form {
 .form-group textarea:focus,
 .form-row input:focus,
 .form-row textarea:focus {
-  border: 1.5px solid #4f5efc;
+  border: 1.5px solid var(--primary-blue);
   outline: none;
-  background: #eaf2fb;
+  background: var(--container-bg);
 }
 
 .submit-btn {
-  background: linear-gradient(145deg, #4a6d9b, #3c5a80);
-  color: white;
+  color: var(--text-light);
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
@@ -166,21 +176,32 @@ form {
   transition: opacity 0.2s;
 }
 
+.submit-btn+.submit-btn {
+  margin-left: 10px;
+  /* Adiciona um espaço entre os botões */
+}
+
+
 .submit-btn:hover {
-  opacity: 0.9;
+  /* Aumenta ligeiramente o tamanho do botão */
+  transform: scale(1.03);
 }
 
 /* Botões de submit específicos */
 .btn-cadastro {
-  background: linear-gradient(145deg, #4a6d9b, #3c5a80);
+  background: var(--primary-blue);
 }
 
 .btn-manutencao {
-  background: linear-gradient(90deg, #f39c12 0%, #e67e22 100%);
+  background: var(--accent-orange);
 }
 
 .btn-edicao {
-  background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
+  background: #28a745;
+}
+
+.btn-sair {
+  background: #dc3545;
 }
 
 /* === PÁGINA DE CADASTRO (index.html) === */
@@ -206,10 +227,10 @@ form {
 #qrCode {
   display: block;
   margin: 0 auto;
-  background: #eaf2fb;
+  background: var(--input-bg);
   border-radius: 12px;
   padding: 12px;
-  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
 }
 
 .equip-photo-preview {
@@ -217,9 +238,35 @@ form {
   max-height: 180px;
   margin-top: 8px;
   border-radius: 12px;
-  border: 1.5px solid #b3c7e6;
-  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
-  background: #f0f6ff;
+  border: 1.5px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  background: var(--input-bg);
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Mensagens de feedback para validação */
+.feedback-message {
+  font-size: 14px;
+  margin-left: 178px;
+  /* Alinha com o início do input */
+  height: 16px;
+  /* Garante que não empurre o layout */
+}
+
+.feedback-message.error {
+  color: #e74c3c;
+  /* Vermelho */
+}
+
+.feedback-message.success {
+  color: #27ae60;
+  /* Verde */
 }
 
 /* === PÁGINA DE LISTAGEM (listar_equipamentos.php) === */
@@ -238,17 +285,17 @@ form {
 .table-equipamentos td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #dce8f7;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .table-equipamentos thead th {
-  background-color: #eaf2fb;
+  background-color: var(--bg-color);
   font-weight: 500;
-  color: #355c7d;
+  color: var(--dark-blue);
 }
 
 .table-equipamentos tbody tr:hover {
-  background-color: #f0f6ff;
+  background-color: var(--input-bg);
 }
 
 .equip-photo-thumb {
@@ -256,13 +303,14 @@ form {
   height: 60px;
   object-fit: cover;
   border-radius: 8px;
-  border: 1px solid #b3c7e6;
+  border: 1px solid var(--border-color);
 }
 
 .search-form {
   display: flex;
   margin-bottom: 25px;
   position: relative;
+
   /* Necessário para posicionar o botão dentro */
 }
 
@@ -271,9 +319,10 @@ form {
   padding: 10px 15px;
   /* Adiciona espaço à direita para o botão não sobrepor o texto */
   padding-right: 110px;
-  border: 1px solid #b3c7e6;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 16px;
+  background-color: rgb(187, 238, 187);
 }
 
 .search-btn {
@@ -285,8 +334,8 @@ form {
   /* Faz o botão ter a mesma altura do input */
   padding: 10px 20px;
   border: none;
-  background-color: #355c7d;
-  color: white;
+  background-color: var(--dark-blue);
+  color: var(--text-light);
   /* Arredonda apenas os cantos direito do botão */
   border-radius: 0 8px 8px 0;
   cursor: pointer;
@@ -300,7 +349,7 @@ form {
   margin: 2px;
   border-radius: 6px;
   text-decoration: none;
-  color: #fff;
+  color: var(--text-light);
   font-size: 13px;
   border: none;
   cursor: pointer;
@@ -316,26 +365,76 @@ form {
 }
 
 .btn-maintenance {
-  background-color: #f39c12;
+  background-color: var(--accent-orange);
 }
 
 .btn-edit {
-  background-color: #2ecc71;
+  background-color: #28a745;
 }
 
 .btn-delete {
   background-color: #e74c3c;
 }
 
+.details-title {
+  margin-top: 20px !important;
+  /* Reduz o espaço acima do título */
+}
+
+
 /* === PÁGINA DE DETALHES (detalhes_equipamento.php) === */
 .details-container {
   max-width: 900px;
 }
 
+/* Estilo de Modal para a página de detalhes */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  /* Fundo escuro semi-transparente */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  /* Permite rolagem se o conteúdo for maior que a tela */
+}
+
+.details-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.btn-nav {
+  background-color: #5a67d8;
+}
+
+.btn-print {
+  background-color: var(--accent-orange);
+}
+
+.details-actions .action-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+
+
 h2 {
   text-align: center;
   margin-top: 40px;
-  border-top: 1px solid #dce8f7;
+  border-top: 1px solid var(--border-color);
   padding-top: 30px;
 }
 
@@ -351,17 +450,25 @@ h2 {
   height: 200px;
   object-fit: cover;
   border-radius: 12px;
-  border: 2px solid #b3c7e6;
+  border: 2px solid var(--border-color);
 }
 
 .info-item {
-  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
 }
 
 .info-item strong {
   display: block;
-  color: #355c7d;
+  color: var(--dark-blue);
   margin-bottom: 4px;
+}
+
+.info-item span {
+  color: var(--text-dark);
+  font-size: 20px;
+  font-weight: 50px;
 }
 
 .table-manutencoes {
@@ -374,24 +481,24 @@ h2 {
 .table-manutencoes td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #dce8f7;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .table-manutencoes thead th {
-  background-color: #eaf2fb;
+  background-color: var(--bg-color);
   font-weight: 500;
-  color: #355c7d;
+  color: var(--dark-blue);
 }
 
 .table-manutencoes tbody tr:hover {
-  background-color: #f0f6ff;
+  background-color: var(--input-bg);
 }
 
 .no-results {
   text-align: center;
   padding: 40px;
   font-size: 18px;
-  color: #7f8c8d;
+  color: #6c757d;
 }
 
 /* === PÁGINA ADICIONAR MANUTENÇÃO (adicionar_manutencao.php) === */
@@ -402,7 +509,7 @@ h2 {
 .sub-header {
   text-align: center;
   margin-bottom: 32px;
-  color: #355c7d;
+  color: var(--dark-blue);
   font-weight: 500;
 }
 
@@ -415,8 +522,8 @@ h2 {
 .report-filter-btn {
   padding: 10px 20px;
   border: none;
-  background-color: #355c7d;
-  color: white;
+  background-color: var(--dark-blue);
+  color: var(--text-light);
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
@@ -457,20 +564,109 @@ h2 {
 }
 
 .page-link {
-  color: #355c7d;
+  color: var(--dark-blue);
   text-decoration: none;
   padding: 8px 14px;
-  border: 1px solid #b3c7e6;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   transition: background-color 0.2s, color 0.2s;
 }
 
 .page-link:hover {
-  background-color: #eaf2fb;
+  background-color: var(--bg-color);
 }
 
 .page-link.active {
-  background-color: #355c7d;
-  color: white;
-  border-color: #355c7d;
+  background-color: var(--dark-blue);
+  color: var(--text-light);
+  border-color: var(--dark-blue);
+}
+
+/* === MODAL DE STATUS (listar_equipamentos.php) === */
+.modal-overlay.active {
+  display: flex;
+  /* Torna o modal visível */
+}
+
+.modal-content {
+  background-color: var(--container-bg);
+  padding: 30px 40px;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  animation: fadeInScale 0.3s ease-out;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.modal-close-btn:hover {
+  color: #333;
+}
+
+.modal-content p {
+  font-size: 18px;
+  color: var(--text-dark);
+  margin: 0;
+  margin-top: 15px;
+}
+
+.modal-icon {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+/* Cores de status */
+.modal-content.success .modal-icon {
+  color: #27ae60;
+  /* Verde */
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* === ESTILOS DE IMPRESSÃO === */
+@media print {
+  body {
+    background-color: #fff;
+    padding: 0;
+  }
+
+  .main-nav,
+  .details-actions {
+    display: none !important;
+    /* Esconde o menu e os botões de ação */
+  }
+
+  .modal-overlay {
+    position: static !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .container.details-container {
+    box-shadow: none;
+    border: none;
+    max-width: 100%;
+    padding: 0;
+  }
 }

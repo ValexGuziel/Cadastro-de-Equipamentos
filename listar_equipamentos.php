@@ -58,6 +58,22 @@ $total_pages = ceil($total_items / $items_per_page);
 if ($result === false) {
     die("Erro ao executar a consulta: " . $conn->error);
 }
+
+// --- Lógica para Mensagem de Status (Modal) ---
+$status_message = '';
+$status_class = '';
+if (isset($_GET['status'])) {
+    switch ($_GET['status']) {
+        case 'deleted':
+            $status_message = 'Equipamento excluído com sucesso!';
+            $status_class = 'success';
+            break;
+        case 'updated':
+            $status_message = 'Equipamento atualizado com sucesso!';
+            $status_class = 'success';
+            break;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -75,8 +91,20 @@ if ($result === false) {
 <body>
     <div class="container_equipamentos">
         <?php include 'header.php'; ?>
-        <h1>Lista de Equipamentos Cadastrados</h1>
 
+        <?php if (!empty($status_message)) : ?>
+            <!-- Modal de Status -->
+            <div id="status-modal" class="modal-overlay active">
+                <div class="modal-content <?php echo $status_class; ?>">
+                    <span class="modal-close-btn">&times;</span>
+                    <div class="modal-icon">
+                        <i class="fa fa-check-circle"></i>
+                    </div>
+                    <p><?php echo $status_message; ?></p>
+                </div>
+            </div>
+        <?php endif; ?>
+        
         <!-- Formulário de Busca -->
         <form action="listar_equipamentos.php" method="GET" class="search-form">
             <input type="text" name="search" placeholder="Buscar por Nome ou TAG..." value="<?php echo htmlspecialchars($search_term); ?>">
@@ -109,7 +137,7 @@ if ($result === false) {
                             <td><?php echo htmlspecialchars($row['nome']); ?></td>
                             <td><?php echo htmlspecialchars($row['setor']); ?></td>
                             <td>
-                                <a href="detalhes_equipamento.php?id=<?php echo $row['id']; ?>" class="action-btn btn-details">Detalhes</a>
+                                <a href="detalhes_equipamento.php?id=<?php echo $row['id']; ?>" class="action-btn btn-details">Histórico</a>
                                 <a href="adicionar_manutencao.php?equipamento_id=<?php echo $row['id']; ?>" class="action-btn btn-maintenance">Manutenção</a>
                                 <a href="editar_equipamento.php?id=<?php echo $row['id']; ?>" class="action-btn btn-edit">Editar</a>
                                 <a href="excluir_equipamento.php?id=<?php echo $row['id']; ?>" class="action-btn btn-delete" onclick="return confirm('Tem certeza que deseja excluir este equipamento?');">Excluir</a>
@@ -142,6 +170,26 @@ if ($result === false) {
         </div>
 
     </div>
+
+    <script>
+        // Lógica para fechar o modal
+        const modal = document.getElementById('status-modal');
+        if (modal) {
+            const closeBtn = modal.querySelector('.modal-close-btn');
+            
+            // Fecha ao clicar no 'X'
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            // Fecha ao clicar fora do conteúdo do modal
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

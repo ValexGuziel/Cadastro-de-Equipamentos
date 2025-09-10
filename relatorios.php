@@ -97,11 +97,44 @@ $conn->close();
     <style>
         .report-filters {
             display: flex;
+            flex-direction:row;
             gap: 20px;
             align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
             margin-bottom: 30px;
-            background-color: #eaf2fb;
-            padding: 20px;
+            margin-top: 30px;
+            
+        }
+        .report-filters label {
+            font-weight: bold;
+            color: #355c7d;
+            margin-right: 10px;
+        }
+        .report-filters input[type="date"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .report-filter-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        .report-filter-btn:hover {
+            background-color: #45a049;
+        }
+        .report-filter-btn i {
+            margin-right: 8px;
+            margin-bottom: 30px;
+            background-color: #1d1e7a;
+            padding: 5px;
             border-radius: 8px;
         }
         .report-summary {
@@ -122,14 +155,18 @@ $conn->close();
         .chart-container {
             margin-bottom: 40px;
         }
+        .container h1 {
+            text-align: center;
+            
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        
         <?php include 'header.php'; ?>
-        <h1>Relatório de Custos de Manutenção</h1>
-        <!-- Filtros -->
+         <!-- Filtros -->
         <form action="relatorios.php" method="GET" class="report-filters">
             <div>
                 <label for="data_inicio">Data Início:</label>
